@@ -1,61 +1,70 @@
-/* Задание на урок:
-
-1) Создать переменную numberOfFilms и в неё поместить ответ от пользователя на вопрос:
-'Сколько фильмов вы уже посмотрели?'
-
-2) Создать объект personalMovieDB и в него поместить такие свойства:
-    - count - сюда передается ответ на первый вопрос
-    - movies - в это свойство поместить пустой объект
-    - actors - тоже поместить пустой объект
-    - genres - сюда поместить пустой массив
-    - privat - в это свойство поместить boolean(логическое) значение false
-
-3) Задайте пользователю по два раза вопросы:
-    - 'Один из последних просмотренных фильмов?'
-    - 'На сколько оцените его?'
-Ответы стоит поместить в отдельные переменные
-Записать ответы в объект movies в формате: 
-    movies: {
-        'logan': '8.1'
-    }
-
-Проверить, чтобы все работало без ошибок в консоли */
-
 'use strict';
 
-const numberOfFilms = +prompt('Сколько фильмов вы уже посмотрели?', '');
+let numberOfFilms;
+
+function start () {
+    numberOfFilms = +prompt('Сколько фильмов вы уже посмотрели?', '');
+
+    while (numberOfFilms === '' || numberOfFilms === null || isNaN(numberOfFilms)) {
+        numberOfFilms = +prompt('Сколько фильмов вы уже посмотрели?', '');
+    }
+}
+
+// start();
 
 const personalMovieDB = {
     count: numberOfFilms,
     movies: {},
     actors: {},
-    actors: [],
+    genres: [],
     privat: false,
 };
 
-for (let i = 0; i < 2; i++) {
-    const firstQuestion = prompt('Один из последних просмотренных фильмов?', '');
-    const secondQuestion = prompt('На сколько оцените его?', '');
+function rememberMyFilms() {
+    for (let i = 0; i < 2; i++) {
+        const firstQuestion = prompt('Один из последних просмотренных фильмов?', '');
+        const secondQuestion = prompt('На сколько оцените его?', '');
+    
+        if(firstQuestion !== null && secondQuestion !== null &&
+            firstQuestion !== '' && secondQuestion !== '' &&
+            firstQuestion.length < 50 && secondQuestion < 50) {
+                personalMovieDB.movies[firstQuestion] = secondQuestion;
+                console.log('done');
+            } else {
+                console.log('error');
+                i--;
+            }
+    }
+}
+    
+// rememberMyFilms();
 
-    if(firstQuestion !== null && secondQuestion !== null &&
-        firstQuestion !== '' && secondQuestion !== '' &&
-        firstQuestion.length < 50 && secondQuestion < 50) {
-            personalMovieDB.movies[firstQuestion] = secondQuestion;
-            console.log('done');
-        } else {
-            console.log('error');
-            i--;
-        }
+function detectPersonalLevel() {
+    if (personalMovieDB.count < 10) {
+        alert("Просмотрено довольно мало фильмов");
+    } else if (personalMovieDB.count >= 10 && personalMovieDB.count < 30) {
+        alert("Вы классический зритель");
+    } else if (personalMovieDB.count > 30) {
+        alert("Вы киноман");
+    } else {
+        alert("Произошла ошибка");
+    }
 }
 
-if (personalMovieDB.count < 10) {
-    alert("Просмотрено довольно мало фильмов");
-} else if (personalMovieDB.count >= 10 && personalMovieDB.count < 30) {
-    alert("Вы классический зритель");
-} else if (personalMovieDB.count > 30) {
-    alert("Вы киноман");
-} else {
-    alert("Произошла ошибка");
+// detectPersonalLevel();
+
+function showMyDB(hidden) {
+    if(!hidden) {
+        console.log(personalMovieDB);
+    }
 }
 
-console.log(personalMovieDB);
+showMyDB(personalMovieDB.privat);
+
+function writeYourGenres() {
+    for (let i = 1; i <= 3; i++) {
+        personalMovieDB.genres[i - 1] = prompt(`Ваш любимый жанр под номером ${i}`, '');
+    }
+};
+
+writeYourGenres();
